@@ -4,11 +4,12 @@ import bcrypt from "bcrypt";
 import {sendMail} from "../utils/mailer.js";
 import crypto from "crypto";
 
+
 //Register Endppoint
 
 export const registerUser = async (req, res) => {
   try {
-    const { firstname, lastname, email, password, role, number } = req.body;
+    const { firstname, lastname, email, password, number } = req.body;
 
     // find if user already exists
     const user = await User.findOne({ email });
