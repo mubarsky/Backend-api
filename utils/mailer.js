@@ -12,7 +12,7 @@ export const sendMail = async ({ to, subject, text, html }) => {
   });
 
   const mailOptions = {
-    from: `"My App" <${process.env.SMTP_USER}>`,
+    from: `"HealthPro Hospital" <${process.env.SMTP_USER}>`,
     to,
     subject,
     text,
