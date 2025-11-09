@@ -1,23 +1,32 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
+
+let resend;
+
+function getResendClient() {
+  if (!resend) {
+    if (!process.env.RESEND_API_KEY) {
+      throw new Error("Missing RESEND_API_KEY env variable");
+    }
+    resend = new Resend(process.env.RESEND_API_KEY);
+  }
+  return resend;
+}
 
 export const sendMail = async ({ to, subject, text, html }) => {
-  const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: process.env.SMTP_PORT,
-    secure: process.env.SMTP_SECURE === "true",
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
-    },
-  });
+  const resendClient = getResendClient();
 
-  const mailOptions = {
-    from: `"HealthPro Hospital" <${process.env.SMTP_USER}>`,
+  const from =
+    process.env.EMAIL_FROM || "HealthPro Hospital <onboarding@mubarsky.com>";
+
+  const response = await resendClient.emails.send({
+    from,
     to,
     subject,
     text,
     html,
-  };
-6
-  return await transporter.sendMail(mailOptions);
+  });
+
+  console.log("📧 Email sent response:", response);
+
+  return response;
 };

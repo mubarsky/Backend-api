@@ -102,11 +102,11 @@ export const forgotPassword = async (req, res) => {
     if (!user) {
       return res.status(404).json({
         message: "User not found",
-      })
+      });
     }
     // generate OTP
     const otp = crypto.randomInt(100000, 999999).toString();
-    
+
     // set OTP expiration time (e.g., 10 minutes from now)
     user.otp = otp;
     user.otpExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
@@ -114,14 +114,28 @@ export const forgotPassword = async (req, res) => {
     // save user with OTP
     await user.save();
 
-    // send OTP via email
+    // 4️⃣ Email template
+    const subject = "Your HealthPro Password Reset OTP";
+    const html = `
+      <div style="font-family: Arial, sans-serif; line-height: 1.6;">
+        <h2 style="color: #2a7cff;">HealthPro Hospital</h2>
+        <p>Hello ${user.name || "there"},</p>
+        <p>Your One-Time Password (OTP) for password reset is:</p>
+        <h1 style="color: #333; letter-spacing: 4px;">${otp}</h1>
+        <p>This OTP is valid for 10 minutes.</p>
+        <p>If you did not request this, please ignore this email.</p>
+        <br/>
+        <p>— The HealthPro Team</p>
+      </div>
+    `;
+
     await sendMail({
       to: user.email,
-      subject: "Password Reset OTP",
+      subject,
       text: `Your OTP for password reset is ${otp}. It is valid for 10 minutes.`,
-  
+      html,
     });
-    
+
     // response to client
     return res.status(200).json({
       message: "OTP sent to email",
