@@ -9,6 +9,7 @@ import cors from "cors";
 dotenv.config();
 const app = express();
 
+console.log("RESEND_API_KEY:", process.env.RESEND_API_KEY);
 // parser middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -32,3 +33,5 @@ app.use("/api/v1/task", taskRouters);
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
+
+
