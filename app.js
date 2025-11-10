@@ -1,4 +1,4 @@
-import dotenv from "dotenv";
+// import dotenv from "dotenv";
 import express from "express";
 import connectToDatabase from "./databaseConnection/connection.js";
 import userRoutes from "./routes/user.route.js";
@@ -6,7 +6,13 @@ import taskRouters from "./routes/task.route.js";
 import morgan from "morgan";
 import cors from "cors";
 
-dotenv.config();
+console.log("🔍 Render Environment Variables:", Object.keys(process.env));
+console.log(
+  "✅ RESEND_API_KEY:",
+  process.env.RESEND_API_KEY ? "Loaded ✅" : "Missing ❌"
+);
+
+// dotenv.config();
 const app = express();
 
 console.log("RESEND_API_KEY:", process.env.RESEND_API_KEY);
