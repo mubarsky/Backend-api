@@ -1,4 +1,4 @@
-// import dotenv from "dotenv";
+import dotenv from "dotenv";
 import express from "express";
 import connectToDatabase from "./databaseConnection/connection.js";
 import userRoutes from "./routes/user.route.js";
@@ -13,6 +13,10 @@ console.log(
 );
 
 // dotenv.config();
+if (process.env.NODE_ENV !== "production") {
+  dotenv.config();
+}
+
 const app = express();
 
 console.log("RESEND_API_KEY:", process.env.RESEND_API_KEY);
